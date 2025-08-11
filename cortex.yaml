@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Notifications Service
+  description: Sends emails, SMS, and in-app notifications.
+  x-cortex-tag: notifications-service
+  x-cortex-type: service
+  x-cortex-groups:
+    - communications
+  x-cortex-owners:
+    - type: group
+      name: cortex-workshops/comms-team
+      provider: GITHUB
+  x-cortex-link:
+    - name: README
+      type: docs
+      url: https://github.com/cortex-workshops/notifications-service#readme
+  x-cortex-git:
+    github:
+      repository: cortex-workshops/notifications-service
+      alias: cortex
