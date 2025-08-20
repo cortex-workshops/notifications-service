@@ -18,3 +18,7 @@ info:
     github:
       repository: cortex-workshops/notifications-service
       alias: cortex
+  x-cortex-issues:
+    jira:
+      labels:
+      - name: comms
