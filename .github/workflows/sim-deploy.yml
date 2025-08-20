@@ -33,7 +33,8 @@ jobs:
         [
           {"username":"taylor","name":"Taylor Schmidt","email":"taylor.schmidt@cortex.io"},
           {"username":"roshni","name":"Roshni Sondhi","email":"roshni.sondhi@cortex.io"},
-          {"username":"gianpaul","name":"Gianpaul Rachiele","email":"gianpaul.rachiele@cortex.io"}
+          {"username":"gianpaul","name":"Gianpaul Rachiele","email":"gianpaul.rachiele@cortex.io"},
+          {"username":"sam","name":"Sam Attaya","email":"sam.attaya@cortex.io"}
         ]
     steps:
       - uses: actions/checkout@v4
