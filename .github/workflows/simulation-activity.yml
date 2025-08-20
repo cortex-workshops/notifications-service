@@ -27,13 +27,15 @@ jobs:
       S_PAT_MARION:   ${{ secrets.PAT_MARION }}
       S_PAT_ROSHNI:   ${{ secrets.PAT_ROSHNI }}
       S_PAT_GIANPAUL: ${{ secrets.PAT_GIANPAUL }}
+      S_PAT_SAM: ${{ secrets.PAT_SAM }}
 
       # --- Team actors for THIS repo (Comms Team) ---
       ACTORS: |
         [
           {"username":"roshni","git_name":"Roshni","git_email":"roshni@cortex.io","pat_secret":"PAT_ROSHNI"},
           {"username":"taylor","git_name":"Taylor Schmidt","git_email":"taylor@cortex.io","pat_secret":"PAT_TAYLOR"},
-          {"username":"gianpaul","git_name":"GianPaul","git_email":"gianpaul@cortex.io","pat_secret":"PAT_GIANPAUL"}
+          {"username":"gianpaul","git_name":"GianPaul","git_email":"gianpaul@cortex.io","pat_secret":"PAT_GIANPAUL"},
+          {"username":"sam","git_name":"Sam","git_email":"sam.attaya@cortex.io","pat_secret":"PAT_SAM"}
         ]
 
       # --- Org-wide reviewer pool (we'll avoid the actor's own token) ---
