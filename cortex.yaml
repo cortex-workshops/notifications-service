@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Notifications Service
-  description: Sends emails, SMS, and in-app notifications.
+  description: Sends emails, SMS, and in-app notifications
   x-cortex-tag: notifications-service
   x-cortex-type: service
   x-cortex-groups:
