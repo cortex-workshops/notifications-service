@@ -187,22 +187,54 @@ jobs:
           else
             echo "number=$NUM" >> $GITHUB_OUTPUT
           fi
-
-      - name: Decide review/approval delays
+          
+      - name: Decide review/approval delays (BIG_DIFF aware, bash-only)
         id: delays
         if: steps.auth.outputs.skip != 'true' && steps.pr.outputs.number
         shell: bash
         run: |
+          set -e
           rr() { local lo="$1" hi="$2"; echo $(( lo + RANDOM % (hi - lo + 1) )); }
+
+          # Base windows from env
           FR_MIN=${FIRST_REVIEW_MIN:-20}
           FR_MAX=${FIRST_REVIEW_MAX:-120}
           AP_MIN=${APPROVAL_MIN:-15}
           AP_MAX=${APPROVAL_MAX:-180}
-          FIRST_REVIEW_DELAY=$(rr "$FR_MIN" "$FR_MAX")
-          APPROVAL_DELAY=$(rr "$AP_MIN" "$AP_MAX")
-          echo "first_review_minutes=$FIRST_REVIEW_DELAY" >> $GITHUB_OUTPUT
-          echo "approval_minutes=$APPROVAL_DELAY" >> $GITHUB_OUTPUT
-          echo "First review in ~${FIRST_REVIEW_DELAY}m; approval in ~${APPROVAL_DELAY}m"
+
+          scenario="${{ steps.scenario.outputs.value }}"
+
+          # Only BIG_DIFF gets long waits. Everything else is "small".
+          # Use integer percent multipliers to avoid floats.
+          if [ "$scenario" = "BIG_DIFF" ]; then
+            BUCKET="xlarge"
+            FACTOR_PCT=220   # 2.20x
+            # Optionally widen bases to feel heavier
+            FR_MIN=$((FR_MIN + 40))
+            FR_MAX=$((FR_MAX + 180))
+            AP_MIN=$((AP_MIN + 30))
+            AP_MAX=$((AP_MAX + 240))
+          else
+            BUCKET="small"
+            FACTOR_PCT=60    # 0.60x
+          fi
+
+          FR_BASE=$(rr "$FR_MIN" "$FR_MAX")
+          AP_BASE=$(rr "$AP_MIN" "$AP_MAX")
+
+          # ceil(base * FACTOR_PCT / 100)
+          first_review_minutes=$(( (FR_BASE * FACTOR_PCT + 99) / 100 ))
+          approval_minutes=$(( (AP_BASE * FACTOR_PCT + 99) / 100 ))
+
+          # Optional caps
+          # [ $first_review_minutes -gt 360 ] && first_review_minutes=360
+          # [ $approval_minutes -gt 720 ] && approval_minutes=720
+
+          echo "first_review_minutes=$first_review_minutes" >> $GITHUB_OUTPUT
+          echo "approval_minutes=$approval_minutes"         >> $GITHUB_OUTPUT
+
+          echo "Scenario: $scenario -> bucket=$BUCKET x${FACTOR_PCT}%"
+          echo "First review in ~${first_review_minutes}m; approval in ~${approval_minutes}m"
 
       - name: Pick reviewer secret name
         id: pick_reviewer
